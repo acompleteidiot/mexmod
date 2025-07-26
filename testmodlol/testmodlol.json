@@ -1,0 +1,16 @@
+{
+	"id": "testmod",
+	"name": "testmod",
+	"display_name": "test mod lol",
+	"author": ["mex"],
+	"description": "its just a test leame me amone :(",
+	"prefix": "tmod",
+	"main_file": "testmodlol.lua",
+	"priority": 2,
+	"badge_colour": "69ffb4",
+	"badge_text_colour": "ff9b69",
+	"version": "1.0.0",
+	"dependencies": [
+	"Steamodded (>=1.*~)"
+]
+}
