@@ -1,0 +1,17 @@
+{
+	"id": "testmod",
+	"name": "testmod",
+	"display_name": "test mod lol",
+	"author": ["mexican", "specles"],
+	"description": "its not actually a test i lied!!!!",
+	"prefix": "tmod",
+	"main_file": "testmodlol.lua",
+	"priority": 2,
+	"badge_colour": "69ffb4",
+	"badge_text_colour": "ff9b69",
+	"version": "1.0.0",
+	"dependencies": [
+	"Steamodded (>=1.*~)",
+	"Talisman"
+]
+}
