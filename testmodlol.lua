@@ -255,7 +255,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = 'eepy',
-	blueprint_compat = false,
+	blueprint_compat = true,
 	loc_txt = {
 		name = 'eepy cat',
 
@@ -278,7 +278,7 @@ SMODS.Joker {
 		return { vars = { card.ability.extra.chips, card.ability.extra.antes, card.ability.extra.antesup, (card.ability.extra.antes >= 3 and "Active!") or "Inactive!" } }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main and card.ability.extra.antes == 3 and not context.blueprint then
+		if context.joker_main and card.ability.extra.antes == 3 then
 			return {
 				chips = card.ability.extra.chips
 			}
