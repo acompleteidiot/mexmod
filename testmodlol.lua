@@ -83,7 +83,7 @@ SMODS.Joker {
 	},
 	atlas = 'spr',
 	pos = { x = 4 , y = 0 ,},
-	config = { extra = {} },
+	config = { extra = { cats = 0 } },
 	calculate = function(self, card, context)
 		if context.joker_main then
 			local catcount = 0
@@ -92,6 +92,7 @@ SMODS.Joker {
 					catcount = catcount + 1
 				end
 			end
+			card.ability.extra.cats = catcount
 			return {
 				dollars = catcount,
 				chips = catcount * 20,
@@ -397,7 +398,9 @@ SMODS.Consumable {
 		delay(0.6)
 	end,
 	can_use = function(self, card)
+		if not SMODS.find_card("j_tmod_catofboxes") then
 		return G.jokers and #G.jokers.cards < G.jokers.config.card_limit
+		end
 	end
 }
 
