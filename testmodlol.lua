@@ -401,6 +401,7 @@ SMODS.Consumable {
 		if not SMODS.find_card("j_tmod_catofboxes") then
 		return G.jokers and #G.jokers.cards < G.jokers.config.card_limit
 		end
+		return true
 	end
 }
 
