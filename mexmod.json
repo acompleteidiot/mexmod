@@ -1,0 +1,17 @@
+{
+	"id": "mexmod",
+	"name": "MexMod",
+	"display_name": "Mex's Mod",
+	"author": ["mexican", "specles"],
+	"description": "its my mod now!!!! also credit to: Astro, and more that i most likely forgot for misc stuff such as sprites and code help",
+	"prefix": "mexmod",
+	"main_file": "mexsmod.lua",
+	"priority": 2,
+	"badge_colour": "69ffb4",
+	"badge_text_colour": "ff9b69",
+	"version": "1.0.0",
+	"dependencies": [
+	"Steamodded (>=1.*~)",
+	"Talisman",
+]
+}
