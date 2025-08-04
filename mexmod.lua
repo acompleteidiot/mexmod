@@ -22,18 +22,9 @@ also this is the part of the code with jokers HEHEHE
 i gave up might do later lol
 ITS BEEN HOURS
 maybe later
+maybe its not gonna happen
 --]]
 
---[[
-SMODS.Joker {
-	key = 'catner',
-	loc_txt = {
-	name = 'catner'
-}
-	text = {
-		"Gives {C:money}+$#1#{}, {C:chips}+#2# Chips{}, {C:mult}+#3# Mult{}, and {C:mult}x#4# Mult for each cat card."
-	}
---]]
 SMODS.Joker {
 	key = 'testcat',
 	loc_txt = {
@@ -49,9 +40,13 @@ SMODS.Joker {
 		return { vars = { card.ability.extra.chips } }
 	end,
 	rarity = 1,
+	pools = {
+		["cat_shop"] = true,
+		["cat"] = true
+	},
 	blueprint_compat = true,
 	atlas = 'spr',
-	pos = { x = 8, y = 0 },
+	pos = { x = 9, y = 0 },
 	cost = 1,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -76,13 +71,16 @@ SMODS.Joker {
 		}
 	},
 	cost = 5,
-	rarity = 3,
+	rarity = "cry_epic",
 	pools = {
 		["cat_shop"] = true,
 		["cat"] = true
 	},
 	atlas = 'spr',
-	pos = { x = 4 , y = 0 ,},
+	pos = { x = 3, y = 0, },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.cats } }
+	end,
 	config = { extra = { cats = 0 } },
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -141,7 +139,7 @@ SMODS.Joker {
 	end,
 	rarity = 1,
 	atlas = 'spr',
-	pos = { x = 9, y = 0 },
+	pos = { x = 10, y = 0 },
 	cost = 5,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -181,7 +179,7 @@ SMODS.Joker {
 		if context.end_of_round and context.main_eval and context.beat_boss and not context.blueprint then
 			local ret = { { message = localize("k_upgrade_ex"), colour = G.C.MULT, card = card } }
 			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-			if next(SMODS.find_card("j_tmod_sweden")) then
+			if next(SMODS.find_card("j_mexmod_sweden")) then
 				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 				ret[#ret + 1] = { message = "Teamwork!", colour = G.C.CHIPS, card = card }
 			end
@@ -204,7 +202,7 @@ SMODS.Joker {
 	config = { extra = { chips = 30, chips_gain = 15 } },
 	rarity = 3,
 	atlas = 'spr',
-	pos = { x = 5, y = 0 },
+	pos = { x = 8, y = 0 },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain } }
 	end,
@@ -217,7 +215,7 @@ SMODS.Joker {
 		if context.end_of_round and context.main_eval and context.beat_boss and not context.blueprint then
 			local ret = { { message = localize("k_upgrade_ex"), colour = G.C.CHIPS, card = card } }
 			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
-			if next(SMODS.find_card("j_tmod_america")) then
+			if next(SMODS.find_card("j_mexmod_america")) then
 				card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
 				ret[#ret + 1] = { message = "Teamwork!", colour = G.C.MULT, card = card }
 			end
@@ -241,7 +239,7 @@ SMODS.Joker {
 	rarity = 1,
 	config = { extra = { mult = 4 } },
 	atlas = 'spr',
-	pos = { x = 1, y = 0},
+	pos = { x = 1, y = 0 },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult } }
 	end,
@@ -329,13 +327,15 @@ SMODS.Joker {
 		text = {
 			"Generates 1 free, {C:dark_edition}Negative{} Box of Cats at end of round.",
 			"Also gives 1 joker slot for every cat card, excluding this one.",
-			"{C:inactive}'lol thats alot of cats'"
+			"{C:inactive}'lol thats alot of cats'",
+			"{C:inactive} ART BY Astro IN THE BALATRO DISCORD"
 		}
 	},
 	rarity = 4,
 	atlas = 'spr',
-	pos = { x = 3, y = 0},
-	config = { extra = { acard_limit = 0, acard_limit_old = 0 }},
+	pos = { x = 4, y = 0 },
+	soul_pos = { x = 5, y = 0 },
+	config = { extra = { acard_limit = 0, acard_limit_old = 0 } },
 	pools = {
 		["cat"] = true,
 		["cat_shop"] = true
@@ -346,27 +346,40 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.end_of_round and context.main_eval then
 			SMODS.add_card {
-				key = 'c_tmod_boxofcats',
+				key = 'c_mexmod_boxofcats',
 				edition = 'e_negative'
 			}
 		end
-		if context.adding_card or context.selling_card then
+		if context.adding_card or context.buying_card or context.selling_card or context.end_of_round and context.main_eval or context.using_consumeable and context.consumeable.config.center.key == 'c_mexmod_boxofcats' then
 			if not context.blueprint then
-			local catcount = -1
-			for _, J in ipairs(G.jokers.cards) do
-				if J.config.center.pools and J.config.center.pools.cat then
-					catcount = catcount + 1
+				local catcount = -1
+				if context.using_consumeable and context.consumeable.config.center.key == 'c_mexmod_boxofcats' then
+					catcount = 0
 				end
+				if context.selling_card and (context.card.config.center.pools and next(context.card.config.center.pools)) then
+					if context.selling_card and context.card.config.center.pools.cat then
+						catcount = -2
+					end
+				end
+				for _, J in ipairs(G.jokers.cards) do
+					if J.config.center.pools and J.config.center.pools.cat then
+						catcount = catcount + 1
+					end
+				end
+				card.ability.extra.acard_limit_old = card.ability.extra.acard_limit
+				card.ability.extra.acard_limit = catcount
+				G.jokers.config.card_limit = G.jokers.config.card_limit - card.ability.extra.acard_limit_old
+				G.jokers.config.card_limit = G.jokers.config.card_limit + card.ability.extra.acard_limit
 			end
-			card.ability.extra.acard_limit_old = card.ability.extra.acard_limit
-			card.ability.extra.acard_limit = catcount
-			G.jokers.config.card_limit = G.jokers.config.card_limit - card.ability.extra.acard_limit_old
-			G.jokers.config.card_limit = G.jokers.config.card_limit + card.ability.extra.acard_limit
 		end
-	end
 	end,
-}
+	remove_from_deck = function(self, card, from_debuff)
+		---@diagnostic disable-next-line: redundant-return-value
+		if from_debuff then return nil end
+		G.jokers.config.card_limit = G.jokers.config.card_limit + 1 - card.ability.extra.acard_limit_old
+	end,
 
+}
 
 -- NOOOOOO YOU CANT JUST START DOING TAROTS RIGHT HERE YOU HAVEN'T MADE ALL THE JOKERS
 -- tarot cards go brrr motherfucker
@@ -379,7 +392,8 @@ SMODS.Consumable {
 		text = {
 			"Summons one cat card.",
 			"{C:inactive}'You have picked up a cat.'",
-			"{C:inactive, s:0.5} 'btw your literally stupid if you dont know what jokers are cats'"
+			"{C:inactive, s:0.5} 'btw your literally stupid if you dont know what jokers are cats'",
+			"{C:inactive} ART BY Astro IN THE BALATRO DISCORD"
 		}
 	},
 	atlas = 'consumables',
@@ -398,8 +412,8 @@ SMODS.Consumable {
 		delay(0.6)
 	end,
 	can_use = function(self, card)
-		if not SMODS.find_card("j_tmod_catofboxes") then
-		return G.jokers and #G.jokers.cards < G.jokers.config.card_limit
+		if not SMODS.find_card("j_mexmod_catofboxes") then
+			return G.jokers and #G.jokers.cards < G.jokers.config.card_limit
 		end
 		return true
 	end
@@ -424,3 +438,4 @@ SMODS.ObjectType {
 
 	}
 }
+
