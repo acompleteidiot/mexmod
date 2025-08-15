@@ -74,7 +74,7 @@ SMODS.Joker {
 		}
 	},
 	cost = 5,
-	rarity = "cry_epic",
+	rarity = "rare",
 	pools = {
 		["cat_shop"] = true,
 		["cat"] = true
@@ -441,6 +441,7 @@ SMODS.ObjectType {
 
 	}
 }
+
 
 
 
